@@ -122,7 +122,7 @@ if archivo:
     
     # === Gráfico de Torta por Tipo ===
     tipo_cantidad = df_sol.groupby("Tipo")["Toneladas"].sum()
-    colors = sns.color_palette("set3")[0:len(tipo_cantidad)]  # Colores suaves
+    colors = sns.color_palette("Set3")[0:len(tipo_cantidad)]  # Colores suaves
 
     fig1, ax1 = plt.subplots(figsize=(3.5, 3.5))
     wedges, texts, autotexts = ax1.pie(
