@@ -85,14 +85,14 @@ if archivo:
     ])
     st.dataframe(df_sol, use_container_width=True)
 
-    # === Gráfico de Torta por Tipo (más pequeño) ===
+    # === Gráfico de Torta por Tipo ===
     tipo_cantidad = df_sol.groupby("Tipo")["Toneladas"].sum()
-    fig1, ax1 = plt.subplots(figsize=(5, 5))  # Tamaño más pequeño
+    fig1, ax1 = plt.subplots(figsize=(4, 4))  # reducido
     ax1.pie(tipo_cantidad, labels=tipo_cantidad.index, autopct='%1.1f%%', startangle=90)
     ax1.axis('equal')
     st.pyplot(fig1)
 
-    # === Gráfico de Barras Apiladas con etiquetas en diagonal ===
+    # === Gráfico de Barras Apiladas ===
     pivot_df = df_sol.pivot_table(index='Proveedor', columns='Tipo', values='Toneladas', aggfunc='sum', fill_value=0)
     pivot_df['Total'] = pivot_df.sum(axis=1)
     pivot_df = pivot_df.sort_values('Total', ascending=False)
@@ -105,11 +105,9 @@ if archivo:
     ax2.grid(axis='y', linestyle='--', alpha=0.7)
     ax2.yaxis.set_major_formatter(mtick.FuncFormatter(lambda x, p: format(int(x), ',')))
 
-    # ➕ Etiquetas en diagonal
-    ax2.set_xticklabels(pivot_df_values.index, rotation=45, ha='right')
+    # etiquetas en diagonal
+    ax2.set_xticklabels(ax2.get_xticklabels(), rotation=45, ha='right')
 
-    # ➕ Etiquetas de cantidad encima de las barras
     for i, total in enumerate(pivot_df['Total'].values):
         ax2.text(i, total + total*0.01, f"{total:,.0f}", ha='center', va='bottom', fontsize=9)
-
     st.pyplot(fig2)
