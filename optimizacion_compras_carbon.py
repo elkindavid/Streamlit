@@ -120,6 +120,7 @@ if archivo:
     #     ax2.text(i, total + total*0.01, f"{total:,.0f}", ha='center', va='bottom', fontsize=9, rotation=45)
     # st.pyplot(fig2)
     
+    # === Gráfico de Torta por Tipo ===
     tipo_cantidad = df_sol.groupby("Tipo")["Toneladas"].sum()
     colors = sns.color_palette("pastel")[0:len(tipo_cantidad)]  # Colores suaves
 
@@ -140,17 +141,17 @@ if archivo:
     with col2:
         st.pyplot(fig1, bbox_inches='tight')
         
+    # === Gráfico de Barras Apiladas ===
     # === Preparación del DataFrame ===
     pivot_df = df_sol.pivot_table(index='Proveedor', columns='Tipo', values='Toneladas', aggfunc='sum', fill_value=0)
     pivot_df['Total'] = pivot_df.sum(axis=1)
     pivot_df = pivot_df.sort_values('Total', ascending=False)
     pivot_df_values = pivot_df.drop(columns='Total')
 
-    # === Colores bonitos con seaborn ===
+    # Paleta de colores más agradable
     tipo_list = pivot_df_values.columns
-    palette = sns.color_palette("tab20", n_colors=len(tipo_list))
+    palette = sns.color_palette("Set2", n_colors=len(tipo_list))  # colores más suaves y armoniosos
 
-    # === Gráfico con Matplotlib (apilado) ===
     fig2, ax2 = plt.subplots(figsize=(12, 6))
 
     bottom = [0] * len(pivot_df_values)
@@ -161,17 +162,19 @@ if archivo:
         ax2.bar(x, valores, bottom=bottom, label=tipo, color=palette[i])
         bottom = [bottom[j] + valores[j] for j in range(len(valores))]
 
-    # === Etiquetas y estilo ===
     ax2.set_xticks(x)
     ax2.set_xticklabels(pivot_df_values.index, rotation=45, ha='right')
     ax2.set_title("Pedidos por Proveedor y Tipo de Carbón", fontsize=14)
     ax2.set_ylabel("Toneladas")
     ax2.set_xlabel("")
-    ax2.grid(axis='y', linestyle='--', alpha=0.7)
+
+    # Solo líneas horizontales suaves
+    ax2.grid(visible=True, axis='y', linestyle='--', alpha=0.5)
+
     ax2.yaxis.set_major_formatter(mtick.FuncFormatter(lambda x, p: format(int(x), ',')))
     ax2.legend(title='Tipo', bbox_to_anchor=(1.01, 1), loc='upper left')
 
-    # === Etiquetas con el total ===
+    # Etiquetas de totales encima de cada barra
     totales = pivot_df['Total'].values
     for i, total in enumerate(totales):
         ax2.text(i, total + total * 0.01, f"{total:,.0f}", ha='center', va='bottom', fontsize=9, rotation=45)
