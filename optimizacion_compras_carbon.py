@@ -4,6 +4,9 @@ from collections import OrderedDict
 from pulp import *
 import matplotlib.pyplot as plt
 import matplotlib.ticker as mtick
+import seaborn as sns
+
+sns.set_theme(style="whitegrid")  # Otros estilos: "dark", "ticks", "white"
 
 st.set_page_config(page_title="Modelo de Optimización de Carbón", layout="wide")
 
@@ -85,34 +88,85 @@ if archivo:
     ])
     st.dataframe(df_sol, use_container_width=True)
 
-    # === Gráfico de Torta por Tipo ===
+    # # === Gráfico de Torta por Tipo ===
+    # tipo_cantidad = df_sol.groupby("Tipo")["Toneladas"].sum()
+    # fig1, ax1 = plt.subplots(figsize=(4, 4))  # reducido
+    # ax1.pie(tipo_cantidad, labels=tipo_cantidad.index, autopct='%1.1f%%', startangle=90)
+    # ax1.axis('equal')
+    # ax1.set_title("Distribución por Tipo de Carbón", fontsize=14)
+    
+    # col1, col2, col3 = st.columns([1, 2, 1])  # La columna del medio es más ancha
+    # with col2:
+    #     st.pyplot(fig1, bbox_inches='tight')
+
+    # # === Gráfico de Barras Apiladas ===
+    # pivot_df = df_sol.pivot_table(index='Proveedor', columns='Tipo', values='Toneladas', aggfunc='sum', fill_value=0)
+    # pivot_df['Total'] = pivot_df.sum(axis=1)
+    # pivot_df = pivot_df.sort_values('Total', ascending=False)
+    # pivot_df_values = pivot_df.drop(columns='Total')
+
+    # fig2, ax2 = plt.subplots(figsize=(12, 6))
+    # pivot_df_values.plot(kind='bar', stacked=True, ax=ax2, colormap='tab20')
+    # ax2.set_title("Pedidos por Proveedor y Tipo de Carbón", fontsize=14)
+    # ax2.set_ylabel("Toneladas")
+    # ax2.grid(axis='y', linestyle='--', alpha=0.7)
+    # ax2.yaxis.set_major_formatter(mtick.FuncFormatter(lambda x, p: format(int(x), ',')))
+
+    # # etiquetas en diagonal
+    # plt.setp(ax2.get_xticklabels(), rotation=45, ha='right')
+
+
+    # for i, total in enumerate(pivot_df['Total'].values):
+    #     ax2.text(i, total + total*0.01, f"{total:,.0f}", ha='center', va='bottom', fontsize=9, rotation=45)
+    # st.pyplot(fig2)
+    
     tipo_cantidad = df_sol.groupby("Tipo")["Toneladas"].sum()
-    fig1, ax1 = plt.subplots(figsize=(4, 4))  # reducido
-    ax1.pie(tipo_cantidad, labels=tipo_cantidad.index, autopct='%1.1f%%', startangle=90)
+    colors = sns.color_palette("pastel")[0:len(tipo_cantidad)]  # Colores suaves
+
+    fig1, ax1 = plt.subplots(figsize=(3.5, 3.5))
+    wedges, texts, autotexts = ax1.pie(
+        tipo_cantidad,
+        labels=tipo_cantidad.index,
+        autopct='%1.1f%%',
+        startangle=90,
+        colors=colors,
+        textprops={'fontsize': 10},
+        wedgeprops=dict(width=0.5, edgecolor='w')  # estilo donut
+    )
     ax1.axis('equal')
     ax1.set_title("Distribución por Tipo de Carbón", fontsize=14)
-    
-    col1, col2, col3 = st.columns([1, 2, 1])  # La columna del medio es más ancha
+
+    col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
         st.pyplot(fig1, bbox_inches='tight')
-
-    # === Gráfico de Barras Apiladas ===
+        
     pivot_df = df_sol.pivot_table(index='Proveedor', columns='Tipo', values='Toneladas', aggfunc='sum', fill_value=0)
     pivot_df['Total'] = pivot_df.sum(axis=1)
     pivot_df = pivot_df.sort_values('Total', ascending=False)
     pivot_df_values = pivot_df.drop(columns='Total')
 
+    # Para graficar con seaborn, pasamos a formato largo
+    df_melted = pivot_df_values.reset_index().melt(id_vars='Proveedor', var_name='Tipo', value_name='Toneladas')
+
     fig2, ax2 = plt.subplots(figsize=(12, 6))
-    pivot_df_values.plot(kind='bar', stacked=True, ax=ax2, colormap='tab20')
+    sns.barplot(
+        data=df_melted,
+        x='Proveedor',
+        y='Toneladas',
+        hue='Tipo',
+        palette='tab20',
+        ax=ax2
+    )
     ax2.set_title("Pedidos por Proveedor y Tipo de Carbón", fontsize=14)
     ax2.set_ylabel("Toneladas")
+    ax2.set_xlabel("")
     ax2.grid(axis='y', linestyle='--', alpha=0.7)
     ax2.yaxis.set_major_formatter(mtick.FuncFormatter(lambda x, p: format(int(x), ',')))
-
-    # etiquetas en diagonal
     plt.setp(ax2.get_xticklabels(), rotation=45, ha='right')
 
-
-    for i, total in enumerate(pivot_df['Total'].values):
+    # Suma total sobre cada barra
+    totales = df_melted.groupby('Proveedor')['Toneladas'].sum().values
+    for i, total in enumerate(totales):
         ax2.text(i, total + total*0.01, f"{total:,.0f}", ha='center', va='bottom', fontsize=9, rotation=45)
+
     st.pyplot(fig2)
