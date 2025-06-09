@@ -82,19 +82,6 @@ if archivo:
     st.write(f"**Costo Total:** ${value(model.objective):,.0f}")
 
     # === Mostrar Resultados ===
-     # Botón de descarga
-    if not df_sol.empty:
-        col1, col2, col3 = st.columns([5, 1, 1])  # Ajusta la proporción según desees
-        with col1:
-            st.download_button(
-                label="📥 Descargar Excel",
-                data=excel_buffer,
-                file_name="solucion_optima.xlsx",
-                mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-            )
-    else:
-        st.warning("No hay datos para exportar.")
-    
     solucion = {par: x[par].varValue for par in pares if x[par].varValue > 0}
     df_sol = pd.DataFrame([
         {"Proveedor": prov, "Tipo": tipo, "Toneladas": cantidad}
