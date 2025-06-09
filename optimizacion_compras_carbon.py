@@ -135,8 +135,15 @@ if archivo:
         textprops={'fontsize': 10},
         wedgeprops=dict(width=0.5, edgecolor='w', alpha=0.7)  # estilo donut
     )
+    
+    # Cambiar tamaño de fuente de etiquetas y porcentajes
+    for text in texts:
+        text.set_fontsize(8)    # etiquetas (nombres de tipos)
+    for autotext in autotexts:
+        autotext.set_fontsize(7)  # porcentajes
+    
     ax1.axis('equal')
-    ax1.set_title("Distribución por Tipo de Carbón", fontsize=14)
+    ax1.set_title("Distribución por Tipo de Carbón", fontsize=12)
 
     col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
@@ -164,13 +171,12 @@ if archivo:
         bottom = [bottom[j] + valores[j] for j in range(len(valores))]
 
     ax2.set_xticks(x)
-    ax2.set_xticklabels(pivot_df_values.index, rotation=45, ha='right')
-    ax2.set_title("Pedidos por Proveedor y Tipo de Carbón", fontsize=14)
+    ax2.set_xticklabels(pivot_df_values.index, rotation=45, ha='right', fontsize=9)
+    ax2.set_title("Pedidos por Proveedor y Tipo de Carbón", fontsize=12)
     ax2.set_ylabel("Toneladas")
     ax2.set_xlabel("")
 
     # # Solo líneas horizontales suaves
-    # ax2.grid(visible=True, axis='x', linestyle='--', alpha=0.5)
     ax2.grid(visible=True, axis='y', linestyle='--', alpha=0.5)
 
     ax2.yaxis.set_major_formatter(mtick.FuncFormatter(lambda x, p: format(int(x), ',')))
@@ -179,6 +185,6 @@ if archivo:
     # Etiquetas de totales encima de cada barra
     totales = pivot_df['Total'].values
     for i, total in enumerate(totales):
-        ax2.text(i, total + total * 0.01, f"{total:,.0f}", ha='center', va='bottom', fontsize=9, rotation=45)
+        ax2.text(i, total + total * 0.01, f"{total:,.0f}", ha='center', va='bottom', fontsize=8, rotation=45)
 
     st.pyplot(fig2)
