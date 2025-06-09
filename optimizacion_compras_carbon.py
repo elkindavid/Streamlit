@@ -97,16 +97,19 @@ if archivo:
         df_sol.to_excel(writer, index=False, sheet_name='Solución')
         excel_buffer.seek(0)  # volver al inicio del archivo
 
-    # === Botón de descarga Excel ===
+    # Botón de descarga
     if not df_sol.empty:
-        st.download_button(
-            label="📥 Descargar Excel",
-            data=excel_buffer,
-            file_name="solucion_optima.xlsx",
-            mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-        )
+        col1, col2, col3 = st.columns([5, 1, 1])  # Ajusta la proporción según desees
+        with col3:
+            st.download_button(
+                label="📥 Descargar Excel",
+                data=excel_buffer,
+                file_name="solucion_optima.xlsx",
+                mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+            )
     else:
         st.warning("No hay datos para exportar.")
+
     
     # === Gráfico de Torta por Tipo ===
     tipo_cantidad = df_sol.groupby("Tipo")["Toneladas"].sum()
