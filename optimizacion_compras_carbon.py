@@ -8,7 +8,7 @@ import matplotlib.ticker as mtick
 st.set_page_config(page_title="Modelo de Optimización de Carbón", layout="wide")
 
 st.title("🧮 Modelo de Optimización de Compras de Carbón")
-st.markdown("Minimiza el costo total de compra de carbón, cumpliendo restricciones de calidad, mezcla y disponibilidad.")
+st.markdown("Minimiza el costo total de compra de carbón cumpliendo restricciones de calidad, mezcla y disponibilidad.")
 
 # 📁 Cargar archivo
 archivo = st.file_uploader("📤 Carga el archivo de datos (.xlsx):", type=["xlsx"])
