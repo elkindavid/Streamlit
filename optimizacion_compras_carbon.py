@@ -95,47 +95,18 @@ if archivo:
     excel_buffer = io.BytesIO()
     with pd.ExcelWriter(excel_buffer, engine='xlsxwriter') as writer:
         df_sol.to_excel(writer, index=False, sheet_name='Solución')
-    excel_buffer.seek(0)  # volver al inicio del archivo
+        xcel_buffer.seek(0)  # volver al inicio del archivo
 
     # === Botón de descarga Excel ===
-    st.download_button(
-        label="📥 Descargar Excel",
-        data=excel_buffer,
-        file_name="solucion_optima.xlsx",
-        mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-    )
-
-    # # === Gráfico de Torta por Tipo ===
-    # tipo_cantidad = df_sol.groupby("Tipo")["Toneladas"].sum()
-    # fig1, ax1 = plt.subplots(figsize=(4, 4))  # reducido
-    # ax1.pie(tipo_cantidad, labels=tipo_cantidad.index, autopct='%1.1f%%', startangle=90)
-    # ax1.axis('equal')
-    # ax1.set_title("Distribución por Tipo de Carbón", fontsize=14)
-    
-    # col1, col2, col3 = st.columns([1, 2, 1])  # La columna del medio es más ancha
-    # with col2:
-    #     st.pyplot(fig1, bbox_inches='tight')
-
-    # # === Gráfico de Barras Apiladas ===
-    # pivot_df = df_sol.pivot_table(index='Proveedor', columns='Tipo', values='Toneladas', aggfunc='sum', fill_value=0)
-    # pivot_df['Total'] = pivot_df.sum(axis=1)
-    # pivot_df = pivot_df.sort_values('Total', ascending=False)
-    # pivot_df_values = pivot_df.drop(columns='Total')
-
-    # fig2, ax2 = plt.subplots(figsize=(12, 6))
-    # pivot_df_values.plot(kind='bar', stacked=True, ax=ax2, colormap='tab20')
-    # ax2.set_title("Pedidos por Proveedor y Tipo de Carbón", fontsize=14)
-    # ax2.set_ylabel("Toneladas")
-    # ax2.grid(axis='y', linestyle='--', alpha=0.7)
-    # ax2.yaxis.set_major_formatter(mtick.FuncFormatter(lambda x, p: format(int(x), ',')))
-
-    # # etiquetas en diagonal
-    # plt.setp(ax2.get_xticklabels(), rotation=45, ha='right')
-
-
-    # for i, total in enumerate(pivot_df['Total'].values):
-    #     ax2.text(i, total + total*0.01, f"{total:,.0f}", ha='center', va='bottom', fontsize=9, rotation=45)
-    # st.pyplot(fig2)
+    if not df_sol.empty:
+        st.download_button(
+            label="📥 Descargar Excel",
+            data=excel_buffer,
+            file_name="solucion_optima.xlsx",
+            mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        )
+    else:
+        st.warning("No hay datos para exportar.")
     
     # === Gráfico de Torta por Tipo ===
     tipo_cantidad = df_sol.groupby("Tipo")["Toneladas"].sum()
@@ -167,7 +138,7 @@ if archivo:
 
     # Paleta de colores más agradable
     tipo_list = pivot_df_values.columns
-    palette = sns.color_palette("Set3", n_colors=len(tipo_list))  # colores más suaves y armoniosos
+    palette = sns.color_palette("muted", n_colors=len(tipo_list))  # colores más suaves y armoniosos
 
     fig2, ax2 = plt.subplots(figsize=(12, 6))
 
