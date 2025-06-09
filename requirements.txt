@@ -4,3 +4,4 @@ pulp
 matplotlib
 openpyxl
 seaborn
+XlsxWriter
