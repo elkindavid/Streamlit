@@ -80,8 +80,11 @@ if archivo:
     st.success("✅ Modelo resuelto")
     st.write(f"**Estado:** {LpStatus[model.status]}")
     st.write(f"**Costo Total:** ${value(model.objective):,.0f}")
+
+    # === Mostrar Resultados ===
+    solucion = {par: x[par].varValue for par in pares if x[par].varValue > 0}
     
-     # === Cálculo de calidad alcanzada ===
+    # === Cálculo de calidad alcanzada ===
     total = sum(solucion.values())
     s_prom = sum(s[par] * cantidad for par, cantidad in solucion.items()) / total
     fsi_prom = sum(fsi[par] * cantidad for par, cantidad in solucion.items()) / total
@@ -89,9 +92,7 @@ if archivo:
     mv_prom = sum(mv[par] * cantidad for par, cantidad in solucion.items()) / total
 
     st.write(f"**Calidad Alcanzada:** S: {s_prom:.2f}, FSI: {fsi_prom:.2f}, CZ: {cz_prom:.2f}, MV: {mv_prom:.2f}")
-
-    # === Mostrar Resultados ===
-    solucion = {par: x[par].varValue for par in pares if x[par].varValue > 0}
+    
     df_sol = pd.DataFrame([
         {"Proveedor": prov, "Tipo": tipo, "Toneladas": cantidad}
         for (prov, tipo), cantidad in solucion.items()
