@@ -138,9 +138,9 @@ if archivo:
     
     # Cambiar tamaño de fuente de etiquetas y porcentajes
     for text in texts:
-        text.set_fontsize(8)    # etiquetas (nombres de tipos)
+        text.set_fontsize(7)    # etiquetas (nombres de tipos)
     for autotext in autotexts:
-        autotext.set_fontsize(7)  # porcentajes
+        autotext.set_fontsize(6)  # porcentajes
     
     ax1.axis('equal')
     ax1.set_title("Distribución por Tipo de Carbón", fontsize=12)
