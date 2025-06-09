@@ -113,7 +113,7 @@ if archivo:
     
     # === Gráfico de Torta por Tipo ===
     tipo_cantidad = df_sol.groupby("Tipo")["Toneladas"].sum()
-    colors = sns.color_palette("muted")[0:len(tipo_cantidad)]  # Colores suaves
+    colors = sns.color_palette("colorblind")[0:len(tipo_cantidad)]  # Colores suaves
 
     fig1, ax1 = plt.subplots(figsize=(3.5, 3.5))
     wedges, texts, autotexts = ax1.pie(
@@ -141,7 +141,7 @@ if archivo:
 
     # Paleta de colores más agradable
     tipo_list = pivot_df_values.columns
-    palette = sns.color_palette("muted", n_colors=len(tipo_list))  # colores más suaves y armoniosos
+    palette = sns.color_palette("colorblind", n_colors=len(tipo_list))  # colores más suaves y armoniosos
 
     fig2, ax2 = plt.subplots(figsize=(12, 6))
 
