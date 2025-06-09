@@ -90,6 +90,7 @@ if archivo:
     fig1, ax1 = plt.subplots(figsize=(4, 4))  # reducido
     ax1.pie(tipo_cantidad, labels=tipo_cantidad.index, autopct='%1.1f%%', startangle=90)
     ax1.axis('equal')
+    ax1.set_title("Distribución por Tipo de Carbón", fontsize=14)
     
     col1, col2, col3 = st.columns([1, 2, 1])  # La columna del medio es más ancha
     with col2:
@@ -113,5 +114,5 @@ if archivo:
 
 
     for i, total in enumerate(pivot_df['Total'].values):
-        ax2.text(i, total + total*0.01, f"{total:,.0f}", ha='center', va='bottom', fontsize=9)
+        ax2.text(i, total + total*0.01, f"{total:,.0f}", ha='center', va='bottom', fontsize=9, rotation=45)
     st.pyplot(fig2)
