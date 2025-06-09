@@ -133,7 +133,7 @@ if archivo:
         startangle=90,
         colors=colors,
         textprops={'fontsize': 10},
-        wedgeprops=dict(width=0.5, edgecolor='w')  # estilo donut
+        wedgeprops=dict(width=0.5, edgecolor='w', alpha=0.7)  # estilo donut
     )
     ax1.axis('equal')
     ax1.set_title("Distribución por Tipo de Carbón", fontsize=14)
@@ -160,7 +160,7 @@ if archivo:
 
     for i, tipo in enumerate(tipo_list):
         valores = pivot_df_values[tipo].values
-        ax2.bar(x, valores, bottom=bottom, label=tipo, color=palette[i])
+        ax2.bar(x, valores, bottom=bottom, label=tipo, color=palette[i], alpha=0.7)
         bottom = [bottom[j] + valores[j] for j in range(len(valores))]
 
     ax2.set_xticks(x)
