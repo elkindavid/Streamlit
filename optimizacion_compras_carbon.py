@@ -170,7 +170,7 @@ if archivo:
         ax2.bar(x, valores, bottom=bottom, label=tipo, color=palette[i], alpha=0.7)
         bottom = [bottom[j] + valores[j] for j in range(len(valores))]
 
-    ax2.set_xticks(x)
+    ax2.tick_params(axis='x', labelsize=9)
     ax2.set_xticklabels(pivot_df_values.index, rotation=45, ha='right', fontsize=9)
     ax2.set_title("Pedidos por Proveedor y Tipo de Carbón", fontsize=12)
     ax2.set_ylabel("Toneladas")
