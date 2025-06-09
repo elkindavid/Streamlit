@@ -87,14 +87,23 @@ if archivo:
         {"Proveedor": prov, "Tipo": tipo, "Toneladas": cantidad}
         for (prov, tipo), cantidad in solucion.items()
     ])
-    
-    # --- Excel ---
+
+    # Mostrar tabla
+    st.dataframe(df_sol, use_container_width=True)
+
+    # === Generar Excel en memoria ===
     excel_buffer = io.BytesIO()
     with pd.ExcelWriter(excel_buffer, engine='xlsxwriter') as writer:
         df_sol.to_excel(writer, index=False, sheet_name='Solución')
-    excel_data = excel_buffer.getvalue()
-    
-    st.dataframe(df_sol, use_container_width=True)
+    excel_buffer.seek(0)  # volver al inicio del archivo
+
+    # === Botón de descarga Excel ===
+    st.download_button(
+        label="📥 Descargar Excel",
+        data=excel_buffer,
+        file_name="solucion_optima.xlsx",
+        mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    )
 
     # # === Gráfico de Torta por Tipo ===
     # tipo_cantidad = df_sol.groupby("Tipo")["Toneladas"].sum()
