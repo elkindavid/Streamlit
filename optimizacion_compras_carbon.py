@@ -95,7 +95,7 @@ if archivo:
     excel_buffer = io.BytesIO()
     with pd.ExcelWriter(excel_buffer, engine='xlsxwriter') as writer:
         df_sol.to_excel(writer, index=False, sheet_name='Solución')
-        xcel_buffer.seek(0)  # volver al inicio del archivo
+        excel_buffer.seek(0)  # volver al inicio del archivo
 
     # === Botón de descarga Excel ===
     if not df_sol.empty:
@@ -110,7 +110,7 @@ if archivo:
     
     # === Gráfico de Torta por Tipo ===
     tipo_cantidad = df_sol.groupby("Tipo")["Toneladas"].sum()
-    colors = sns.color_palette("Set3")[0:len(tipo_cantidad)]  # Colores suaves
+    colors = sns.color_palette("muted")[0:len(tipo_cantidad)]  # Colores suaves
 
     fig1, ax1 = plt.subplots(figsize=(3.5, 3.5))
     wedges, texts, autotexts = ax1.pie(
