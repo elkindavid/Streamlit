@@ -4,4 +4,3 @@ pulp
 matplotlib
 openpyxl
 seaborn
-io

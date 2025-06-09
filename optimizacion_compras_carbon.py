@@ -5,6 +5,7 @@ from pulp import *
 import matplotlib.pyplot as plt
 import matplotlib.ticker as mtick
 import seaborn as sns
+import io
 
 sns.set_theme(style="whitegrid")  # Otros estilos: "dark", "ticks", "white"
 
@@ -86,6 +87,13 @@ if archivo:
         {"Proveedor": prov, "Tipo": tipo, "Toneladas": cantidad}
         for (prov, tipo), cantidad in solucion.items()
     ])
+    
+    # --- Excel ---
+    excel_buffer = io.BytesIO()
+    with pd.ExcelWriter(excel_buffer, engine='xlsxwriter') as writer:
+        df_sol.to_excel(writer, index=False, sheet_name='Solución')
+    excel_data = excel_buffer.getvalue()
+    
     st.dataframe(df_sol, use_container_width=True)
 
     # # === Gráfico de Torta por Tipo ===
