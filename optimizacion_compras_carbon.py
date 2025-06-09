@@ -161,7 +161,7 @@ if archivo:
 
     # # Solo líneas horizontales suaves
     # ax2.grid(visible=True, axis='x', linestyle='--', alpha=0.5)
-    # ax2.grid(visible=True, axis='y', linestyle='--', alpha=0.5)
+    ax2.grid(visible=True, axis='y', linestyle='--', alpha=0.5)
 
     ax2.yaxis.set_major_formatter(mtick.FuncFormatter(lambda x, p: format(int(x), ',')))
     ax2.legend(title='Tipo', bbox_to_anchor=(1.01, 1), loc='upper left')
