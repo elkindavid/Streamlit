@@ -174,6 +174,6 @@ if archivo:
     # === Etiquetas con el total ===
     totales = pivot_df['Total'].values
     for i, total in enumerate(totales):
-        ax2.text(i, total + total * 0.01, f"{total:,.0f}", ha='center', va='bottom', fontsize=9)
+        ax2.text(i, total + total * 0.01, f"{total:,.0f}", ha='center', va='bottom', fontsize=9, rotation=45)
 
     st.pyplot(fig2)
