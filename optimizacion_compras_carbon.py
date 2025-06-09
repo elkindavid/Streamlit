@@ -150,7 +150,7 @@ if archivo:
 
     # Paleta de colores más agradable
     tipo_list = pivot_df_values.columns
-    palette = sns.color_palette("Set2", n_colors=len(tipo_list))  # colores más suaves y armoniosos
+    palette = sns.color_palette("pastel", n_colors=len(tipo_list))  # colores más suaves y armoniosos
 
     fig2, ax2 = plt.subplots(figsize=(12, 6))
 
@@ -169,7 +169,7 @@ if archivo:
     ax2.set_xlabel("")
 
     # Solo líneas horizontales suaves
-    ax2.grid(visible=False, axis='y', linestyle='--', alpha=0.5)
+    ax2.grid(visible=False, axis='x', linestyle='--', alpha=0.5)
 
     ax2.yaxis.set_major_formatter(mtick.FuncFormatter(lambda x, p: format(int(x), ',')))
     ax2.legend(title='Tipo', bbox_to_anchor=(1.01, 1), loc='upper left')
