@@ -7,7 +7,7 @@ import matplotlib.ticker as mtick
 import seaborn as sns
 import io
 
-sns.set_theme(style="whitegrid")  # Otros estilos: "dark", "ticks", "white"
+sns.set_theme(style="ticks")  # Otros estilos: "dark", "ticks", "white"
 
 st.set_page_config(page_title="Modelo de Optimización de Carbón", layout="wide")
 
