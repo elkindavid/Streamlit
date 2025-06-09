@@ -106,7 +106,8 @@ if archivo:
     ax2.yaxis.set_major_formatter(mtick.FuncFormatter(lambda x, p: format(int(x), ',')))
 
     # etiquetas en diagonal
-    ax2.set_xticklabels(ax2.get_xticklabels(), rotation=45, ha='right')
+    plt.setp(ax2.get_xticklabels(), rotation=45, ha='right')
+
 
     for i, total in enumerate(pivot_df['Total'].values):
         ax2.text(i, total + total*0.01, f"{total:,.0f}", ha='center', va='bottom', fontsize=9)
