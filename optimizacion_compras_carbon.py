@@ -150,7 +150,7 @@ if archivo:
 
     # Paleta de colores más agradable
     tipo_list = pivot_df_values.columns
-    palette = sns.color_palette("pastel", n_colors=len(tipo_list))  # colores más suaves y armoniosos
+    palette = sns.color_palette("Set3", n_colors=len(tipo_list))  # colores más suaves y armoniosos
 
     fig2, ax2 = plt.subplots(figsize=(12, 6))
 
