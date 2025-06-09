@@ -122,7 +122,7 @@ if archivo:
     
     # === Gráfico de Torta por Tipo ===
     tipo_cantidad = df_sol.groupby("Tipo")["Toneladas"].sum()
-    colors = sns.color_palette("pastel")[0:len(tipo_cantidad)]  # Colores suaves
+    colors = sns.color_palette("set3")[0:len(tipo_cantidad)]  # Colores suaves
 
     fig1, ax1 = plt.subplots(figsize=(3.5, 3.5))
     wedges, texts, autotexts = ax1.pie(
@@ -169,7 +169,7 @@ if archivo:
     ax2.set_xlabel("")
 
     # Solo líneas horizontales suaves
-    ax2.grid(visible=False, axis='x', linestyle='--', alpha=0.5)
+    ax2.grid(visible=True, axis='x', linestyle='--', alpha=0.5)
     ax2.grid(visible=True, axis='y', linestyle='--', alpha=0.5)
 
     ax2.yaxis.set_major_formatter(mtick.FuncFormatter(lambda x, p: format(int(x), ',')))
