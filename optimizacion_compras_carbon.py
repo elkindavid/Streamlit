@@ -140,33 +140,40 @@ if archivo:
     with col2:
         st.pyplot(fig1, bbox_inches='tight')
         
+    # === Preparación del DataFrame ===
     pivot_df = df_sol.pivot_table(index='Proveedor', columns='Tipo', values='Toneladas', aggfunc='sum', fill_value=0)
     pivot_df['Total'] = pivot_df.sum(axis=1)
     pivot_df = pivot_df.sort_values('Total', ascending=False)
     pivot_df_values = pivot_df.drop(columns='Total')
 
-    # Para graficar con seaborn, pasamos a formato largo
-    df_melted = pivot_df_values.reset_index().melt(id_vars='Proveedor', var_name='Tipo', value_name='Toneladas')
+    # === Colores bonitos con seaborn ===
+    tipo_list = pivot_df_values.columns
+    palette = sns.color_palette("tab20", n_colors=len(tipo_list))
 
+    # === Gráfico con Matplotlib (apilado) ===
     fig2, ax2 = plt.subplots(figsize=(12, 6))
-    sns.barplot(
-        data=df_melted,
-        x='Proveedor',
-        y='Toneladas',
-        hue='Tipo',
-        palette='tab20',
-        ax=ax2
-    )
+
+    bottom = [0] * len(pivot_df_values)
+    x = range(len(pivot_df_values))
+
+    for i, tipo in enumerate(tipo_list):
+        valores = pivot_df_values[tipo].values
+        ax2.bar(x, valores, bottom=bottom, label=tipo, color=palette[i])
+        bottom = [bottom[j] + valores[j] for j in range(len(valores))]
+
+    # === Etiquetas y estilo ===
+    ax2.set_xticks(x)
+    ax2.set_xticklabels(pivot_df_values.index, rotation=45, ha='right')
     ax2.set_title("Pedidos por Proveedor y Tipo de Carbón", fontsize=14)
     ax2.set_ylabel("Toneladas")
     ax2.set_xlabel("")
     ax2.grid(axis='y', linestyle='--', alpha=0.7)
     ax2.yaxis.set_major_formatter(mtick.FuncFormatter(lambda x, p: format(int(x), ',')))
-    plt.setp(ax2.get_xticklabels(), rotation=45, ha='right')
+    ax2.legend(title='Tipo', bbox_to_anchor=(1.01, 1), loc='upper left')
 
-    # Suma total sobre cada barra
-    totales = df_melted.groupby('Proveedor')['Toneladas'].sum().values
+    # === Etiquetas con el total ===
+    totales = pivot_df['Total'].values
     for i, total in enumerate(totales):
-        ax2.text(i, total + total*0.01, f"{total:,.0f}", ha='center', va='bottom', fontsize=9, rotation=45)
+        ax2.text(i, total + total * 0.01, f"{total:,.0f}", ha='center', va='bottom', fontsize=9)
 
     st.pyplot(fig2)
