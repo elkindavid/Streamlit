@@ -90,7 +90,10 @@ if archivo:
     fig1, ax1 = plt.subplots(figsize=(4, 4))  # reducido
     ax1.pie(tipo_cantidad, labels=tipo_cantidad.index, autopct='%1.1f%%', startangle=90)
     ax1.axis('equal')
-    st.pyplot(fig1, bbox_inches='tight')
+    
+    col1, col2, col3 = st.columns([1, 2, 1])  # La columna del medio es más ancha
+    with col2:
+        st.pyplot(fig1, bbox_inches='tight')
 
     # === Gráfico de Barras Apiladas ===
     pivot_df = df_sol.pivot_table(index='Proveedor', columns='Tipo', values='Toneladas', aggfunc='sum', fill_value=0)
