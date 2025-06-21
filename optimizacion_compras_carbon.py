@@ -28,6 +28,7 @@ if archivo:
     ].apply(pd.to_numeric, errors='coerce')
     df = df[df['Disponible'] > 0]
     df = df.drop_duplicates(subset=['Proveedor', 'Tipo']).sort_values(['Proveedor', 'Tipo'])
+    df['Costo_CCB'] = df['Precio']/((1-df['MV'])/(1-0.012))
 
     # Parámetros
     requerimiento_total = float(hoja.iloc[2, 10])
@@ -41,7 +42,7 @@ if archivo:
 
     # Diccionarios necesarios
     pares = list(OrderedDict.fromkeys(zip(df['Proveedor'], df['Tipo'])))
-    atributos = ['Precio', 'Disponible', 'HT', 'CZ', 'MV', 'S', 'FSI']
+    atributos = ['Costo_CCB','Precio', 'Disponible', 'HT', 'CZ', 'MV', 'S', 'FSI']
     datos = {atr: {(p, t): row[atr] for p, t, row in zip(df['Proveedor'], df['Tipo'], df.to_dict('records'))} for atr in atributos}
     tipos = df['Tipo'].unique().tolist()
 
@@ -50,7 +51,7 @@ if archivo:
     x = LpVariable.dicts("Pedido", pares, lowBound=0, cat='Continuous')
 
     # Objetivo
-    model += lpSum(x[par] * datos['Precio'][par] for par in pares)
+    model += lpSum(x[par] * datos['Costo_CCB'][par] for par in pares)
 
     # Restricciones de cantidad total y disponibilidad
     model += lpSum(x[par] for par in pares) == requerimiento_total, "Requerimiento_Total"
