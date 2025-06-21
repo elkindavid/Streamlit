@@ -112,6 +112,22 @@ if archivo:
     costo_unitario_cbp = costo_total/coque_bruto_producido
     st.write(f'Costo Unitario Coque Bruto Producido: ${costo_unitario_cbp:,.2f}')
 
+    # Mostrar resultado en un dataframe
+    # Crear un diccionario con los resultados
+    resumen = {
+        'S (%)': s_prom * 100,
+        'FSI': fsi_prom,
+        'CZ (%)': cz_prom * 100,
+        'MV (%)': mv_prom * 100,
+        'Costo Total ($)': costo_total,
+        'Rendimiento Coque Bruto (%)': rendimiento * 100,
+        'Total Coque Bruto Producido': coque_bruto_producido,
+        'Costo Unitario Coque Bruto ($/t)': costo_unitario_cbp
+    }
+
+    # Convertir a DataFrame con una sola fila
+    df_resumen = pd.DataFrame([resumen])
+    st.dataframe(df_resumen, use_container_width=True)
 
     # === Exportar Excel ===
     excel_buffer = io.BytesIO()
