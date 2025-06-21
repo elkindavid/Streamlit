@@ -76,7 +76,6 @@ if archivo:
 
     st.success("✅ Modelo resuelto")
     st.write(f"**Estado:** {LpStatus[model.status]}")
-    st.write(f"**Costo Total:** ${value(model.objective):,.0f}")
 
     # === Resultados ===
     solucion = {par: x[par].varValue for par in pares if x[par].varValue > 0}
@@ -93,7 +92,26 @@ if archivo:
         fsi_prom = sum(datos['FSI'][par] * cantidad for par, cantidad in solucion.items()) / total
         cz_prom = sum(datos['CZ'][par] * cantidad for par, cantidad in solucion.items()) / total
         mv_prom = sum(datos['MV'][par] * cantidad for par, cantidad in solucion.items()) / total
-        st.write(f"**Calidad Alcanzada:** S: {s_prom:.2f}, FSI: {fsi_prom:.2f}, CZ: {cz_prom:.2f}, MV: {mv_prom:.2f}")
+        st.write(f"**Calidad Alcanzada:** S: {s_prom * 100:.2f}%, FSI: {fsi_prom:.2f}, CZ: {cz_prom * 100:.2f}%, MV: {mv_prom * 100:.2f}%")
+    
+    # Costo Total
+    # Unir los DataFrames por el campo "Proveedor"
+    df_resultado = pd.merge(df_sol, df[['Proveedor', 'Precio']], on='Proveedor', how='left')
+    df_resultado['Total'] = df_resultado['Cantidad Pedida'] * df_resultado['Precio']
+    costo_total = df_resultado['Total'].sum()
+    # Mostrar el costo total en formato de moneda
+    st.write(f"**Costo total:** ${costo_total:,.2f}")
+
+    # Coque bruto Producido
+    rendimiento = ((1-mv_prom )/(1-0.012))
+    coque_bruto_producido = total * rendimiento
+    st.write(f'Rendimiento Coque Bruto: {rendimiento * 100:.2f}%')
+    st.write(f'Total Coque Bruto Producido: {coque_bruto_producido:,.2f}')
+
+    # Costo unitario del coque bruto producido
+    costo_unitario_cbp = costo_total/coque_bruto_producido
+    st.write(f'Costo Unitario Coque Bruto Producido: ${costo_unitario_cbp:,.2f}')
+
 
     # === Exportar Excel ===
     excel_buffer = io.BytesIO()
