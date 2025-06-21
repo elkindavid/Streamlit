@@ -117,10 +117,10 @@ if archivo:
         'FSI': f"{fsi_prom:.2f}",
         'CZ (%)': f"{cz_prom * 100:.2f}",
         'MV (%)': f"{mv_prom * 100:.2f}",
-        'Costo Total ($)': f"${costo_total:,.2f}",
+        'Costo Total ($)': f"{costo_total:,.2f}",
         'Rendimiento Coque Bruto (%)': f"{rendimiento * 100:.2f}",
         'Total Coque Bruto Producido': f"{coque_bruto_producido:,.2f}",
-        'Costo Unitario Coque Bruto ($/t)': f"${costo_unitario_cbp:,.2f}"
+        'Costo Unitario Coque Bruto ($/t)': f"{costo_unitario_cbp:,.2f}"
     }
 
     # Convertir a DataFrame con una sola fila
