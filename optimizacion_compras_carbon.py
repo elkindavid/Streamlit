@@ -97,7 +97,7 @@ if archivo:
     # Costo Total
     # Unir los DataFrames por el campo "Proveedor"
     df_resultado = pd.merge(df_sol, df[['Proveedor', 'Precio']], on='Proveedor', how='left')
-    df_resultado['Total'] = df_resultado['Cantidad Pedida'] * df_resultado['Precio']
+    df_resultado['Total'] = df_resultado['Toneladas'] * df_resultado['Precio']
     costo_total = df_resultado['Total'].sum()
     # Mostrar el costo total en formato de moneda
     st.write(f"**Costo total:** ${costo_total:,.2f}")
