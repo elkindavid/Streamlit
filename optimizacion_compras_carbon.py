@@ -94,7 +94,6 @@ if archivo:
         fsi_prom = sum(datos['FSI'][par] * cantidad for par, cantidad in solucion.items()) / total
         cz_prom = sum(datos['CZ'][par] * cantidad for par, cantidad in solucion.items()) / total
         mv_prom = sum(datos['MV'][par] * cantidad for par, cantidad in solucion.items()) / total
-        st.write(f"**Calidad Alcanzada:** S: {s_prom * 100:.2f}%, FSI: {fsi_prom:.2f}, CZ: {cz_prom * 100:.2f}%, MV: {mv_prom * 100:.2f}%")
     
     # Costo Total
     # Unir los DataFrames por el campo "Proveedor"
