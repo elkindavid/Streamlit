@@ -83,6 +83,8 @@ if archivo:
         {"Proveedor": p, "Tipo": t, "Toneladas": val}
         for (p, t), val in solucion.items()
     ])
+
+    st.write(f"**RESULTADOS DEL MODELO:**")
     st.dataframe(df_sol, use_container_width=True)
 
     # Calidad alcanzada
@@ -99,35 +101,32 @@ if archivo:
     df_resultado = pd.merge(df_sol, df[['Proveedor', 'Precio']], on='Proveedor', how='left')
     df_resultado['Total'] = df_resultado['Toneladas'] * df_resultado['Precio']
     costo_total = df_resultado['Total'].sum()
-    # Mostrar el costo total en formato de moneda
-    st.write(f"**Costo total:** ${costo_total:,.2f}")
-
+    
     # Coque bruto Producido
     rendimiento = ((1-mv_prom )/(1-0.012))
     coque_bruto_producido = total * rendimiento
-    st.write(f'Rendimiento Coque Bruto: {rendimiento * 100:.2f}%')
-    st.write(f'Total Coque Bruto Producido: {coque_bruto_producido:,.2f}')
 
     # Costo unitario del coque bruto producido
     costo_unitario_cbp = costo_total/coque_bruto_producido
-    st.write(f'Costo Unitario Coque Bruto Producido: ${costo_unitario_cbp:,.2f}')
 
     # Mostrar resultado en un dataframe
-    # Crear un diccionario con los resultados
+    st.write(f"**CALIDAD Y RENDIMIENTO ALCANZADO:**")
+    # Crear un diccionario con los resultados formateados
     resumen = {
-        'S (%)': s_prom * 100,
-        'FSI': fsi_prom,
-        'CZ (%)': cz_prom * 100,
-        'MV (%)': mv_prom * 100,
-        'Costo Total ($)': costo_total,
-        'Rendimiento Coque Bruto (%)': rendimiento * 100,
-        'Total Coque Bruto Producido': coque_bruto_producido,
-        'Costo Unitario Coque Bruto ($/t)': costo_unitario_cbp
+        'S (%)': f"{s_prom * 100:.2f}",
+        'FSI': f"{fsi_prom:.2f}",
+        'CZ (%)': f"{cz_prom * 100:.2f}",
+        'MV (%)': f"{mv_prom * 100:.2f}",
+        'Costo Total ($)': f"${costo_total:,.2f}",
+        'Rendimiento Coque Bruto (%)': f"{rendimiento * 100:.2f}",
+        'Total Coque Bruto Producido': f"{coque_bruto_producido:,.2f}",
+        'Costo Unitario Coque Bruto ($/t)': f"${costo_unitario_cbp:,.2f}"
     }
 
     # Convertir a DataFrame con una sola fila
     df_resumen = pd.DataFrame([resumen])
     st.dataframe(df_resumen, use_container_width=True)
+
 
     # === Exportar Excel ===
     excel_buffer = io.BytesIO()
