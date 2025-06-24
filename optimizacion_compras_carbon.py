@@ -18,7 +18,12 @@ archivo = st.file_uploader("📤 Carga el archivo de datos (.xlsx):", type=["xls
 
 # Controles de usuario
 solo_mineros = st.checkbox("✅ Solo incluir mineros", value=False)
-limite_comercializadores = st.slider("🔒 Límite de participación de comercializadores (%)", 0, 100, 40) / 100
+
+col1, col2, col3 = st.columns([1, 2, 7])  # Ajusta los anchos relativos
+with col1:
+    limite_comercializadores = st.slider(
+        "🔒 Límite de participación de comercializadores (%)", 0, 100, 40
+    ) / 100
 
 if archivo:
     hoja = pd.read_excel(archivo, sheet_name=0, header=None)
