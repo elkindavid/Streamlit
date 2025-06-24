@@ -106,6 +106,24 @@ if archivo:
     st.write(f"**RESULTADOS DEL MODELO:**")
     st.dataframe(df_sol, use_container_width=True)
 
+    # === Exportar Excel ===
+    excel_buffer = io.BytesIO()
+    with pd.ExcelWriter(excel_buffer, engine='xlsxwriter') as writer:
+        df_sol.to_excel(writer, index=False, sheet_name='Solución')
+        excel_buffer.seek(0)
+
+    if not df_sol.empty:
+        col1, col2, col3 = st.columns([5, 1, 1])
+        with col1:
+            st.download_button(
+                label="📥 Descargar Excel",
+                data=excel_buffer,
+                file_name="solucion_optima.xlsx",
+                mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+            )
+    else:
+        st.warning("No hay datos para exportar.")
+
     # Calidad alcanzada
     total = sum(solucion.values())
     if total > 0:
@@ -144,25 +162,6 @@ if archivo:
     # Convertir a DataFrame con una sola fila
     df_resumen = pd.DataFrame([resumen])
     st.dataframe(df_resumen, use_container_width=True)
-
-
-    # === Exportar Excel ===
-    excel_buffer = io.BytesIO()
-    with pd.ExcelWriter(excel_buffer, engine='xlsxwriter') as writer:
-        df_sol.to_excel(writer, index=False, sheet_name='Solución')
-        excel_buffer.seek(0)
-
-    if not df_sol.empty:
-        col1, col2, col3 = st.columns([5, 1, 1])
-        with col1:
-            st.download_button(
-                label="📥 Descargar Excel",
-                data=excel_buffer,
-                file_name="solucion_optima.xlsx",
-                mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-            )
-    else:
-        st.warning("No hay datos para exportar.")
 
     # === Gráfico de Torta por Tipo ===
     tipo_cantidad = df_sol.groupby("Tipo")["Toneladas"].sum()
