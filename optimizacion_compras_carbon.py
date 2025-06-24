@@ -96,6 +96,13 @@ if archivo:
         for (p, t), val in solucion.items()
     ])
 
+    # Agregar columna Clasificación al resultado
+    df_sol = df_sol.merge(
+        df[['Proveedor', 'Tipo', 'Clasificación']],
+        on=['Proveedor', 'Tipo'],
+        how='left'
+    )
+
     st.write(f"**RESULTADOS DEL MODELO:**")
     st.dataframe(df_sol, use_container_width=True)
 
