@@ -6,6 +6,9 @@ import matplotlib.pyplot as plt
 import matplotlib.ticker as mtick
 import seaborn as sns
 import io
+from pulp import PULP_CBC_CMD
+
+
 
 # Configuración general
 sns.set_theme(style="ticks")
@@ -87,7 +90,11 @@ if archivo:
 
     # === Resolución del modelo ===
     with st.spinner("🔄 Ejecutando modelo..."):
-        model.solve()
+        try:
+            result_status = model.solve(PULP_CBC_CMD(msg=False))
+            st.success("✅ Modelo resuelto")
+        except PulpSolverError as e:
+            st.error("❌ Error al ejecutar el solver. Asegúrate de que CBC esté instalado.")
 
     st.success("✅ Modelo resuelto")
     st.write(f"**Estado:** {LpStatus[model.status]}")
