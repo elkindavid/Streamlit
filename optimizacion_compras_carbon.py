@@ -41,12 +41,12 @@ if archivo:
 
     # Parámetros
     requerimiento_total = float(hoja.iloc[2, 10])
-    calidad_esperada = hoja.iloc[2, 12:16]
-    calidad_esperada.index = hoja.iloc[1, 12:16]
+    calidad_esperada = hoja.iloc[2, 13:17]
+    calidad_esperada.index = hoja.iloc[1, 13:17]
     calidad_esperada_dict = calidad_esperada.to_dict()
 
-    limites = hoja.iloc[2:, 17:19].dropna()
-    limites.columns = hoja.iloc[1, 17:19]
+    limites = hoja.iloc[2:, 18:20].dropna()
+    limites.columns = hoja.iloc[1, 18:20]
     limites_dict = dict(zip(limites['TIPO'], limites['LIMITE']))
 
     # Diccionarios necesarios
