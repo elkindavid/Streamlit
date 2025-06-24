@@ -32,6 +32,8 @@ if archivo:
     ].apply(pd.to_numeric, errors='coerce')
     df = df[df['Disponible'] > 0]
     df = df.drop_duplicates(subset=['Proveedor', 'Tipo']).sort_values(['Proveedor', 'Tipo'])
+    if solo_mineros:
+        df = df[df['Clasificación'] == 'Minero']
     df['Costo_CCB'] = df['Precio']/((1-df['MV'])/(1-0.012))
 
     # Parámetros
@@ -46,6 +48,8 @@ if archivo:
 
     # Diccionarios necesarios
     pares = list(OrderedDict.fromkeys(zip(df['Proveedor'], df['Tipo'])))
+    comercializadores = df[df['Clasificación'] == 'Comercializador']
+    pares_comercializadores = list(zip(comercializadores['Proveedor'], comercializadores['Tipo']))
     atributos = ['Costo_CCB','Precio', 'Disponible', 'HT', 'CZ', 'MV', 'S', 'FSI']
     datos = {atr: {(p, t): row[atr] for p, t, row in zip(df['Proveedor'], df['Tipo'], df.to_dict('records'))} for atr in atributos}
     tipos = df['Tipo'].unique().tolist()
@@ -73,6 +77,10 @@ if archivo:
     model += lpSum(x[par] * datos['FSI'][par] for par in pares) >= calidad_esperada_dict['FSI'] * total_pedido, "FSI"
     model += lpSum(x[par] * datos['CZ'][par] for par in pares) <= calidad_esperada_dict['CZ'] * total_pedido, "CZ"
     model += lpSum(x[par] * datos['MV'][par] for par in pares) <= calidad_esperada_dict['MV'] * total_pedido, "MV"
+
+    # Restricción de comercializadores
+    model += lpSum(x[par] for par in pares_comercializadores) <= limite_comercializadores * requerimiento_total, "Limite_Comercializadores"
+
 
     # === Resolución del modelo ===
     with st.spinner("🔄 Ejecutando modelo..."):
